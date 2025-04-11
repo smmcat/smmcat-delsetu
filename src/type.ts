@@ -36,3 +36,25 @@ export interface UserApiResponse {
      */
     deleted_at: string | null;
 }
+
+export type FreeResult = {
+    code: number,
+    status: string,
+    data: AuditResult
+}
+
+export type AuditResult = {
+    msg: string,
+    data: {
+        /** 变态 */
+        hentai: string,
+        /** 绘图 */
+        drawing: string,
+        /** 色情 */
+        porn: string,
+        /** 性感 */
+        sexy: string
+    },
+    /** 分类 */
+    classification: string
+}

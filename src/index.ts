@@ -1,6 +1,5 @@
 import { Context, Schema, Session, h } from 'koishi'
 import path from 'path'
-import { } from 'koishi-plugin-smmcat-localstorage'
 import fs from 'fs'
 import crypto from 'crypto'
 import stream from 'node:stream'
@@ -29,7 +28,6 @@ export interface Config {
   poorSEX: number
 }
 
-export const inject = ['localstorage']
 export const Config: Schema<Config> = Schema.object({
   useFree: Schema.boolean().default(false).description('无appid&key，使用免费的nsfw接口 (开启后不支持filter选项)'),
   maxSEX: Schema.number().default(0.8).description('免费的nsfw接口配置： 最色评级 (允许禁言)'),

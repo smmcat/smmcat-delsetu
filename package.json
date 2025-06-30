@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-smmcat-delsetu",
   "description": "最好的反涩图小帮手",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -9,10 +9,16 @@
     "dist"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/smmcat/smmcat-delsetu/tree/master",
+  "bugs": {
+    "url": "https://github.com/smmcat/smmcat-delsetu/issues"
+  },
   "keywords": [
     "chatbot",
     "koishi",
-    "plugin"
+    "plugin",
+    "反涩图帮手",
+    "anti-nsfw"
   ],
   "peerDependencies": {
     "koishi": "^4.18.2"

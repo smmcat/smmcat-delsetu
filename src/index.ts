@@ -1,4 +1,4 @@
-import { Context, Schema, Session, h } from 'koishi'
+import { Context, Next, Schema, Session, h } from 'koishi'
 import path from 'path'
 import fs from 'fs'
 import crypto from 'crypto'
@@ -97,21 +97,18 @@ export function apply(ctx: Context, config: Config) {
 
   /** 免费鉴别图片接口 */
   const freeApi = {
-    async checkImgToDo(session: Session, next) {
+    async checkImgToDo(session: Session, next: Next) {
       if (!config.isAllGoal && !config.detectionGoal.includes(session.guildId)) {
-        return await next();
+        return next();
       }
-
       const img = h.select(session.elements, "img");
       if (!img.length) {
-        return await next();
+        return next();
       }
       const imgUrl = img.map((item) => {
         return item.attrs.src;
       });
-
       const result = await this.auditPic(imgUrl)
-
       // 不良执行策略
       if (result.code) {
         config.isDel && session.bot.deleteMessage(session.channelId, session.messageId);
@@ -219,13 +216,13 @@ export function apply(ctx: Context, config: Config) {
     "Terror": "恐怖",
     "WomenSexyLeg": "女性性感的腿"
   };
-  async function checkImgToDo(session, next) {
+  async function checkImgToDo(session: Session, next: Next) {
     if (!config.isAllGoal && !config.detectionGoal.includes(session.guildId)) {
-      return await next();
+      return next();
     }
     const img = h.select(session.elements, "img");
     if (!img.length) {
-      return await next();
+      return next();
     }
     const imgUrl = img.map((item) => {
       return item.attrs.src;
@@ -390,14 +387,14 @@ export function apply(ctx: Context, config: Config) {
   const freeTool = {
     md5temp: {},
     md5Len: [],
-    async getPicMd5(imageUrl) {
+    async getPicMd5(imageUrl: string) {
       const response = await ctx.http.get(imageUrl, { responseType: "arraybuffer" });
       const hash = crypto.createHash("md5");
       const buffer = hash.update(Buffer.from(response));
       return buffer.digest("hex");
     },
     /** 校验图片是否存在MD5缓存 */
-    checkPicRepeatDyMD5(md5Data) {
+    checkPicRepeatDyMD5(md5Data: string) {
       if (this.md5temp[md5Data]) {
         config.deBug && console.log("存在重复图片 返回缓存");
         return this.md5temp[md5Data];
@@ -405,7 +402,7 @@ export function apply(ctx: Context, config: Config) {
       return null;
     },
     /** 将返回的结果存进MD5缓存 */
-    putPicMd5TempData(md5Data, result) {
+    putPicMd5TempData(md5Data: string, result) {
       if (!this.md5temp[md5Data]) {
         config.deBug && console.log("新图 开始存入缓存");
         this.md5temp[md5Data] = result;
@@ -426,7 +423,7 @@ export function apply(ctx: Context, config: Config) {
   const tool = {
     md5temp: {},
     md5Len: [],
-    async getPicMd5(imageUrl) {
+    async getPicMd5(imageUrl: string) {
       const response = await ctx.http.get(imageUrl, { responseType: "arraybuffer" });
       const hash = crypto.createHash("md5");
       const buffer = hash.update(Buffer.from(response));
@@ -467,13 +464,13 @@ export function apply(ctx: Context, config: Config) {
 
   ctx.middleware(async (session, next) => {
     if (!session.guildId) {
-      return await next();
+      return next();
     }
     if (config.useFree) {
       freeApi.checkImgToDo(session, next);
     } else {
       checkImgToDo(session, next);
     }
-    return await next();
+    return next();
   });
 }
